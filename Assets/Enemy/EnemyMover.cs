@@ -11,7 +11,26 @@ public class EnemyMover : MonoBehaviour
 
     void Start()
     {
+        FindPath();
+        ReturnToStart();
         StartCoroutine(FollowPath());
+    }
+
+    void FindPath()
+    {
+        path.Clear();
+
+        // 하이어라키 순서대로 발견할거라는 보장이 없어서 좋은 방법은 아님, 이후에 수정할 것 
+        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+        foreach(GameObject waypoint in waypoints)
+        {
+            path.Add(waypoint.GetComponent<Waypoint>());
+        }
+    }
+
+    void ReturnToStart()
+    {
+        transform.position = path[0].transform.position;
     }
 
     // 코루틴
@@ -35,6 +54,8 @@ public class EnemyMover : MonoBehaviour
             }
 
         }
+
+        Destroy(gameObject);
     }
     
 }
