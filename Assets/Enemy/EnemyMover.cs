@@ -9,7 +9,7 @@ public class EnemyMover : MonoBehaviour
     [SerializeField] List<Waypoint> path = new List<Waypoint>();
     [SerializeField] [Range(0f, 5f)] float speed = 1f;
 
-    void Start()
+    void OnEnable()  // 오브젝트가 하이어라키에서 활성화될때 호출됨 
     {
         FindPath();
         ReturnToStart();
@@ -55,7 +55,7 @@ public class EnemyMover : MonoBehaviour
 
         }
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     
 }
