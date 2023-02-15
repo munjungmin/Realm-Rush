@@ -30,6 +30,7 @@ public class CoordinateLabeler : MonoBehaviour
             // do something in only edit mode
             DisplayCoordinates();
             UpdateObjectName();
+            label.enabled = true;
         }
 
         SetLabelColor();
