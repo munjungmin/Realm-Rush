@@ -10,16 +10,18 @@ public class CoordinateLabeler : MonoBehaviour
 {
     [SerializeField] Color defaultColor = Color.white;
     [SerializeField] Color blockedColor = Color.black;
+    [SerializeField] Color exploredColor = Color.yellow;
+    [SerializeField] Color pathColor = new Color(1f, 0.5f, 0.5f);
 
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
-    Waypoint waypoint;
+    GridManager gridManager;
 
     void Awake() 
     {
+        gridManager = FindObjectOfType<GridManager>();
         label = GetComponent<TextMeshPro>();  // coordinateLabler와 같은 객체임을 보장하지 않으니까 RequireComponent 추가
         label.enabled = false;
-        waypoint = GetComponentInParent<Waypoint>();  // Waypoint script는 root 오브젝트에 있고 coordinateLabeler는 자식 오브젝트라서
         DisplayCoordinates();
     }
 
@@ -47,14 +49,30 @@ public class CoordinateLabeler : MonoBehaviour
 
     void SetLabelColor()
     {
-        if(waypoint.IsPlaceable)
-        {
-            label.color = defaultColor;
-        }
-        else
+        if(gridManager == null) { return; }
+        
+        Node node = gridManager.GetNode(coordinates);
+
+        if (node == null) { return; }
+
+        if (!node.isWalkable)
         {
             label.color = blockedColor;
         }
+        else if (node.isPath)
+        {
+            label.color = pathColor;
+        }
+        else if (node.isExlored)
+        {
+            label.color = exploredColor;
+        }
+        else
+        {
+            label.color = defaultColor;
+        }
+
+
     }   
 
     void DisplayCoordinates()
