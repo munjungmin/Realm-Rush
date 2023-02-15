@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 따라야 할 웨이포인트를 전달 
-
+[RequireComponent(typeof(Enemy))]
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField] List<Waypoint> path = new List<Waypoint>();
@@ -27,17 +26,28 @@ public class EnemyMover : MonoBehaviour
     {
         path.Clear();
 
-        // 하이어라키 순서대로 발견할거라는 보장이 없어서 좋은 방법은 아님, 이후에 수정할 것 
-        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
-        foreach(GameObject waypoint in waypoints)
+        GameObject parent = GameObject.FindGameObjectWithTag("Path");
+
+        foreach(Transform child in parent.transform)
         {
-            path.Add(waypoint.GetComponent<Waypoint>());
+            Waypoint waypoint = child.GetComponent<Waypoint>();
+
+            if(waypoint != null)
+            {
+                path.Add(waypoint);
+            }
         }
     }
 
     void ReturnToStart()
     {
         transform.position = path[0].transform.position;
+    }
+
+    void FinishPath()
+    {
+        enemy.StealGold();
+        gameObject.SetActive(false);
     }
 
     // 코루틴
@@ -62,8 +72,7 @@ public class EnemyMover : MonoBehaviour
 
         }
 
-        enemy.StealGold();
-        gameObject.SetActive(false);
+        FinishPath();
     }
     
 }
