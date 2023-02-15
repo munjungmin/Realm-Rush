@@ -5,6 +5,7 @@ using TMPro;
 using System;
 
 [ExecuteAlways]  // execute in edit mode & play mode 
+[RequireComponent(typeof(TextMeshPro))]
 public class CoordinateLabeler : MonoBehaviour
 {
     [SerializeField] Color defaultColor = Color.white;
@@ -16,7 +17,7 @@ public class CoordinateLabeler : MonoBehaviour
 
     void Awake() 
     {
-        label = GetComponent<TextMeshPro>();
+        label = GetComponent<TextMeshPro>();  // coordinateLabler와 같은 객체임을 보장하지 않으니까 RequireComponent 추가
         label.enabled = false;
         waypoint = GetComponentInParent<Waypoint>();  // Waypoint script는 root 오브젝트에 있고 coordinateLabeler는 자식 오브젝트라서
         DisplayCoordinates();
@@ -31,7 +32,7 @@ public class CoordinateLabeler : MonoBehaviour
             UpdateObjectName();
         }
 
-        ColorCoordinates();
+        SetLabelColor();
         ToggleLabels();
     }
 
@@ -43,7 +44,7 @@ public class CoordinateLabeler : MonoBehaviour
         }
     }
 
-    void ColorCoordinates()
+    void SetLabelColor()
     {
         if(waypoint.IsPlaceable)
         {
